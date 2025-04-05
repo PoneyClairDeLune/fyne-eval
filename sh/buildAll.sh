@@ -1,32 +1,34 @@
 #!/bin/bash
 function getToolchain {
-	case $1 in
-		"linux")
-			case $2 in
-				"amd64")
-					if [ -f "$(which x86_64-linux-gnu-gcc)" ]; then
-						printf "x86_64-linux-gnu-gcc"
-					else
-						printf "gcc"
-					fi
-					;;
-				"arm64")
-					if [ -f "$(which aarch64-linux-gnu-gcc)" ]; then
-						printf "aarch64-linux-gnu-gcc"
-					else
-						printf "gcc"
-					fi
-					;;
-			esac
-			;;
-		"windows")
-			if [ -f "$(which x86_64-w64-mingw32-gcc)" ]; then
-				printf "x86_64-w64-mingw32-gcc"
-			else
-				printf "x86_64-w64-mingw64-gcc"
-			fi
-			;;
-	esac
+	cLibTarget="gnu"
+	if [ "$3" != "" ]; then
+		cLibTarget="$3"
+	fi
+	if [ "$3" == "" ] && [ "$1" == "linux" ]; then
+		case $2 in
+			"amd64")
+				printf "x86_64-linux-gnu-gcc"
+				;;
+			"arm64")
+				printf "aarch64-linux-gnu-gcc"
+				;;
+			"riscv64")
+				printf "riscv64-linux-gnu-gcc"
+				;;
+		esac
+	else
+		case $2 in
+			"amd64")
+				printf "zig cc -target x86_64-${1}-${cLibTarget}"
+				;;
+			"arm64")
+				printf "zig cc -target aarch64-${1}-${cLibTarget}"
+				;;
+			"riscv64")
+				printf "zig cc -target riscv64-${1}-${cLibTarget}"
+				;;
+		esac
+	fi
 }
 
 rawArch=$(uname -m)
@@ -42,7 +44,8 @@ esac
 cat ./targets.conf | while IFS= read -r target; do
 	export GOOS=$(printf $target | cut -d'_' -f1)
 	export GOARCH=$(printf $target | cut -d'_' -f2)
-	export CC="$(getToolchain $GOOS $GOARCH)"
+	export CLIB=$(printf $target | cut -d'_' -f3)
+	export CC="$(getToolchain $GOOS $GOARCH $CLIB)"
 	echob "Currently building on \"${GOARCH}\" for \"${GOOS}\"."
 	if [ "${GOOS}" == "linux" ] && [ "${GOARCH}" == "${rootArch}" ]; then
 		shx build

@@ -9,6 +9,9 @@ ls -1 "./go" | while IFS= read -r folder; do
 		if [ "${GOARCH}" != "" ]; then
 			fileName="${fileName}_${GOARCH}"
 		fi
+		if [ "${CLIB}" != "" ]; then
+			fileName="${fileName}_${CLIB}"
+		fi
 		if [ "${GOOS}" == "windows" ]; then
 			fileName="${fileName}.exe"
 		fi

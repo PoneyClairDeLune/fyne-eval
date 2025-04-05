@@ -1,6 +1,6 @@
 #!/bin/bash
 export versionGo=1.24.2
-export versionZig=0.14.0
+export versionZig=0.13.0
 
 usedArch=$(uname -m)
 case $usedArch in
@@ -48,6 +48,7 @@ fi
 dpkg --add-architecture amd64
 dpkg --add-architecture arm64
 apt-get update
-apt install -y git >/dev/null 2>/dev/null
+apt install -y git pkg-config >/dev/null 2>/dev/null
+apt install -y gcc gcc-aarch64-linux-gnu gcc-riscv64-linux-gnu >/dev/null 2>/dev/null
 apt install -y --no-install-recommends libgl-dev:amd64 libx11-dev:amd64 libxrandr-dev:amd64 libxxf86vm-dev:amd64 libxi-dev:amd64 libxcursor-dev:amd64 libxinerama-dev:amd64 libxkbcommon-dev:amd64 >/dev/null 2>/dev/null
 apt install -y --no-install-recommends libgl-dev:arm64 libx11-dev:arm64 libxrandr-dev:arm64 libxxf86vm-dev:arm64 libxi-dev:arm64 libxcursor-dev:arm64 libxinerama-dev:arm64 libxkbcommon-dev:arm64 >/dev/null 2>/dev/null

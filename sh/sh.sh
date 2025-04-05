@@ -22,8 +22,7 @@ if [ "$ociRun" != "" ]; then
 	fi
 	ociName="$(cat nix/zsh/.docker_name)"
 	echo "Starting container..."
-	mkdir -p "./nix/opt"
-	$ociRun run -it -d --name "$ociName" -v "$SOURCE_DIR":/data $gpgSrc -v "$SOURCE_DIR/nix/opt":"/opt" docker.io/ltgc/gel:slimdeb sleep infinity 2>/dev/null
+	$ociRun run -it -d --name "$ociName" -v "$SOURCE_DIR":/data $gpgSrc docker.io/ltgc/gel:slimdeb sleep infinity 2>/dev/null
 	$ociRun start "$ociName" 2>/dev/null
 	$ociRun exec -it "$ociName" bash /data/nix/zsh/boot.sh "$useNix"
 	echo "Quitting container..."
