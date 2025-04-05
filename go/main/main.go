@@ -1,4 +1,4 @@
-package main
+package guiEvalFyne
 
 import (
 	"fyne.io/fyne/v2"

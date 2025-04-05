@@ -4,3 +4,4 @@
 build
 .docker_name
 nix/go
+nix/opt
